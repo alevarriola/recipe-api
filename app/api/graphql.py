@@ -6,7 +6,7 @@ from app.services.recipes import RecipeService
 from app.domain.schemas import RecipeCreate
 from app.db.session import SessionLocal
 
-
+# Define GraphQL types
 @strawberry.type
 class RecipeGQL:
     id: int
@@ -14,25 +14,25 @@ class RecipeGQL:
     description: str | None
     created_at: str = strawberry.field(name="createdAt")
 
-
+# Define Recommendation type
 @strawberry.type
 class RecommendationGQL:
     recommended_id: int | None = strawberry.field(name="recommendedId")
     title: str
     reason: str
 
-
+# Dependency to get RecipeService
 async def with_service(fn):
     async with SessionLocal() as session:
         svc = RecipeService(RecipeRepo(session))
         return await fn(svc)
 
-
+# Define Query and Mutation types
 @strawberry.type
 class Query:
     @strawberry.field
-    async def recipes(self) -> list[RecipeGQL]:
-        async def run(svc: RecipeService):
+    async def recipes(self) -> list[RecipeGQL]: 
+        async def run(svc: RecipeService): 
             items = await svc.list_recipes()
             return [
                 RecipeGQL(
@@ -77,6 +77,6 @@ class Mutation:
             return await svc.delete_recipe(recipe_id)
         return await with_service(run)
 
-
+# Create the GraphQL schema and router
 schema = strawberry.Schema(query=Query, mutation=Mutation)
 graphql_app = GraphQLRouter(schema)

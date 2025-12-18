@@ -1,7 +1,7 @@
 import pytest
 import httpx
 
-
+# Test creating and listing recipes via REST API
 @pytest.mark.anyio
 async def test_create_and_list_recipes(test_app):
     transport = httpx.ASGITransport(app=test_app)
@@ -24,7 +24,7 @@ async def test_create_and_list_recipes(test_app):
         assert len(items) == 1
         assert items[0]["title"] == "Pasta"
 
-
+# Test deleting a recipe via REST API
 @pytest.mark.anyio
 async def test_delete_recipe(test_app):
     transport = httpx.ASGITransport(app=test_app)
@@ -38,6 +38,6 @@ async def test_delete_recipe(test_app):
         r = await client.delete(f"/recipes/{recipe_id}")
         assert r.status_code == 204
 
-        # Delete again -> 404
+        # Delete again, 404
         r = await client.delete(f"/recipes/{recipe_id}")
         assert r.status_code == 404

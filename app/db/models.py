@@ -5,6 +5,7 @@ from sqlalchemy import String, Text, DateTime, func
 class Base(DeclarativeBase):
     pass
 
+# Recipe model
 class Recipe(Base):
     __tablename__ = "recipes"
 

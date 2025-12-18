@@ -6,11 +6,14 @@ from app.db.repo import RecipeRepo
 from app.services.recipes import RecipeService
 from app.domain.schemas import RecipeCreate, RecipeOut, RecommendationOut
 
+# Define the API router
 router = APIRouter(prefix="/recipes", tags=["recipes"])
 
+# Dependency to get RecipeService
 def get_service(session: AsyncSession = Depends(get_session)) -> RecipeService:
     return RecipeService(RecipeRepo(session))
 
+# Define API endpoints
 @router.post("", response_model=RecipeOut, status_code=201)
 async def create_recipe(payload: RecipeCreate, svc: RecipeService = Depends(get_service)):
     return await svc.create_recipe(payload)

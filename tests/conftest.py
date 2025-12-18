@@ -14,7 +14,7 @@ from app.db.session import get_session
 import app.api.graphql as graphql_module
 import app.db.session as db_session_module
 
-
+# Fixture to create a test database engine
 @pytest.fixture
 async def test_engine(tmp_path):
     db_path = tmp_path / "test.db"
@@ -28,12 +28,13 @@ async def test_engine(tmp_path):
     finally:
         await engine.dispose()
 
-
+# Fixture to create a session maker for tests
 @pytest.fixture
 def session_maker(test_engine) -> async_sessionmaker[AsyncSession]:
     return async_sessionmaker(test_engine, expire_on_commit=False, class_=AsyncSession)
 
 
+# Fixture to create a test FastAPI app with overridden dependencies
 @pytest.fixture
 def test_app(session_maker, monkeypatch):
     async def override_get_session():

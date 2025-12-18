@@ -10,7 +10,7 @@ def gql(query: str, variables: dict | None = None) -> dict:
         payload["variables"] = variables
     return payload
 
-
+# Fake AI client for testing purposes
 class FakeAIClient:
     async def recommend(self, recipes):
         if not recipes:
@@ -26,7 +26,7 @@ class FakeAIClient:
             reason="Mocked AI recommendation for GraphQL testing.",
         )
 
-
+# Tests for GraphQL API
 @pytest.mark.anyio
 async def test_graphql_create_and_list(test_app):
     transport = httpx.ASGITransport(app=test_app)
@@ -105,7 +105,7 @@ async def test_graphql_delete_recipe(test_app):
         assert "errors" not in body
         assert body["data"]["deleteRecipe"] is True
 
-        # Delete again -> false
+        # Delete again, false
         r = await client.post("/graphql", json=gql(delete_q, {"id": recipe_id}))
         assert r.status_code == 200
         body = r.json()
